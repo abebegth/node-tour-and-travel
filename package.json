@@ -1,0 +1,14 @@
+{
+  "name": "tour-travel-webapp",
+  "version": "1.0.0",
+  "description": "Tour and Travel web application using Node.js, Express and MongoDB",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Abebe Gietaneh",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.2"
+  }
+}
