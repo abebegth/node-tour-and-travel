@@ -27,6 +27,28 @@ app.get('/api/v1/tours', (req, res) =>{
     })
 });
 
+// handling url parameters
+app.get('/api/v1/tours/:id', (req, res) =>{
+    console.log(req.params); // assigns the value from the url to the 'id' variable
+    
+    const id = req.params.id * 1; // req.params.id is in string format, it has to be a number.
+
+    // find an element in the tours array whose id is equal to the provided parameter id, then hold only that value in the tour array.
+    const tour = tours.find(el => el.id === id); 
+    if(!tour){
+        res.status(404).json({
+            status: "Fail",
+            message: "Invalid ID"
+        })
+    }
+    res.status(200).json({
+        status: "Success",
+        data: {
+            tour: tour
+        }
+    })
+});
+
 // handling post request to the 'api/v1/tours' url
 app.post('/api/v1/tours', (req, res) =>{
     // console.log(req.body);
