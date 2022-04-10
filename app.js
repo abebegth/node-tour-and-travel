@@ -17,7 +17,7 @@ const tours = JSON.parse(fs.readFileSync(`${__dirname}/json-data/data/tours-simp
 // console.log(tours);
 
 // handling get request to the 'api/v1/tours' url
-app.get('/api/v1/tours', (req, res) =>{
+app.get('/api/v1/tours', (req, res) =>{    // route handler....
     res.status(200).json({
         status: "Success",
         result: tours.length,
@@ -30,8 +30,10 @@ app.get('/api/v1/tours', (req, res) =>{
 // handling url parameters
 app.get('/api/v1/tours/:id', (req, res) =>{
     console.log(req.params); // assigns the value from the url to the 'id' variable
+    // we can add ? to the url parameter to make it optional .... api/v1/tours/:id/y?
+    // here, y is optional parameter. we can specify or not
     
-    const id = req.params.id * 1; // req.params.id is in string format, it has to be a number.
+    const id = req.params.id * 1; // req.params.id is in string format, it has to be a number, that's why we multiply by 1
 
     // find an element in the tours array whose id is equal to the provided parameter id, then hold only that value in the tour array.
     const tour = tours.find(el => el.id === id); 
@@ -70,7 +72,27 @@ app.post('/api/v1/tours', (req, res) =>{
     // res.send("Done");
 })
 
+// handling Patch requests to the 'api/v1/tours/id' url
+app.patch('/api/v1/tours/:id', (req, res) =>{
+    if(req.params.id * 1 > tours.length){
+        res.status(404).json({
+            status: "Fail",
+            message: "Invalid ID"
+        })
+    }
+
+    res.status(200).json({
+        status: "Success",
+        data: {
+            tour: '<Updated tour here>'
+        }
+    })
+})
+
+
+// Creating a server & listening at 3000
 const port = 3000;
 app.listen(port, ()=>{
     console.log(`App running on port ${port}`);
+    console.log(`You can browse at 127.0.0.1:${port}`)
 });
