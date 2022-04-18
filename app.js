@@ -89,6 +89,21 @@ app.patch('/api/v1/tours/:id', (req, res) =>{
     })
 })
 
+// handling Delete requests to the 'api/v1/tours/id' url
+app.delete('/api/v1/tours/:id', (req, res) =>{
+    if(req.params.id * 1 > tours.length){
+        res.status(404).json({
+            status: "Fail",
+            message: "Invalid ID"
+        })
+    }
+
+    res.status(204).json({
+        status: "Success",
+        data: null
+    })
+})
+
 
 // Creating a server & listening at 3000
 const port = 3000;
