@@ -16,8 +16,9 @@ app.get('/', (req, res) =>{
 const tours = JSON.parse(fs.readFileSync(`${__dirname}/json-data/data/tours-simple.json`));
 // console.log(tours);
 
-// handling get request to the 'api/v1/tours' url
-app.get('/api/v1/tours', (req, res) =>{    // route handler....
+// functions for handling route requests
+// handling get request for all tours
+const getAllTours = (req, res) =>{    // route handler....
     res.status(200).json({
         status: "Success",
         result: tours.length,
@@ -25,10 +26,9 @@ app.get('/api/v1/tours', (req, res) =>{    // route handler....
             tours: tours
         }
     })
-});
-
-// handling url parameters
-app.get('/api/v1/tours/:id', (req, res) =>{
+}
+// handling get request with url parameter
+const getTour = (req, res) =>{
     console.log(req.params); // assigns the value from the url to the 'id' variable
     // we can add ? to the url parameter to make it optional .... api/v1/tours/:id/y?
     // here, y is optional parameter. we can specify or not
@@ -49,10 +49,9 @@ app.get('/api/v1/tours/:id', (req, res) =>{
             tour: tour
         }
     })
-});
-
-// handling post request to the 'api/v1/tours' url
-app.post('/api/v1/tours', (req, res) =>{
+}
+// handling post request
+const createTour = (req, res) =>{
     // console.log(req.body);
 
     // take the id of the last object from the tours data object, then add 1 to it to specify the id of the object which will be posted.
@@ -70,10 +69,9 @@ app.post('/api/v1/tours', (req, res) =>{
         })
     })
     // res.send("Done");
-})
-
+}
 // handling Patch requests to the 'api/v1/tours/id' url
-app.patch('/api/v1/tours/:id', (req, res) =>{
+const updateTour = (req, res) =>{
     if(req.params.id * 1 > tours.length){
         res.status(404).json({
             status: "Fail",
@@ -87,10 +85,9 @@ app.patch('/api/v1/tours/:id', (req, res) =>{
             tour: '<Updated tour here>'
         }
     })
-})
-
+}
 // handling Delete requests to the 'api/v1/tours/id' url
-app.delete('/api/v1/tours/:id', (req, res) =>{
+const delteTour = (req, res) =>{
     if(req.params.id * 1 > tours.length){
         res.status(404).json({
             status: "Fail",
@@ -102,7 +99,16 @@ app.delete('/api/v1/tours/:id', (req, res) =>{
         status: "Success",
         data: null
     })
-})
+}
+
+// app.get('/api/v1/tours', getAllTours);
+// app.get('/api/v1/tours/:id', getTour);
+// app.post('/api/v1/tours', createTour);
+// app.patch('/api/v1/tours/:id', updateTour);
+// app.delete('/api/v1/tours/:id', delteTour);
+
+app.route('/api/v1/tours').get(getAllTours).post(createTour);
+app.route('/api/v1/tours/:id').get(getTour).patch(updateTour).delete(delteTour);
 
 
 // Creating a server & listening at 3000
