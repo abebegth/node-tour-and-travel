@@ -5,6 +5,18 @@ const app = express();
 
 app.use(express.json()); // will be used as a middleware
 
+// custom middleware example
+app.use((req, res, next) =>{
+    console.log("Hello from the middleware");
+    next();
+})
+
+// custom middleware to convert the request time to ISO string format
+app.use((req, res, next) =>{
+    req.requestTime = new Date().toISOString().substring(0, 10);
+    next();
+})
+
 app.get('/', (req, res) =>{
     res.status(200).json({message: "Hello from the server...", app: "Tour and Travel"})
 });
@@ -19,8 +31,10 @@ const tours = JSON.parse(fs.readFileSync(`${__dirname}/json-data/data/tours-simp
 // functions for handling route requests
 // handling get request for all tours
 const getAllTours = (req, res) =>{    // route handler....
+    console.log(req.requestTime)
     res.status(200).json({
         status: "Success",
+        requestedAt: req.requestTime,
         result: tours.length,
         data: {
             tours: tours
