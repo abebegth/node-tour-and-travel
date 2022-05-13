@@ -157,11 +157,17 @@ const deleteUser = (req, res)=>{
 // app.patch('/api/v1/tours/:id', updateTour);
 // app.delete('/api/v1/tours/:id', delteTour);
 
-app.route('/api/v1/tours').get(getAllTours).post(createTour);
-app.route('/api/v1/tours/:id').get(getTour).patch(updateTour).delete(delteTour);
+const tourRouter = express.Router(); // creating a new router for the tours resource
+const userRouter = express.Router(); // creating a new router for users resource
 
-app.route('/api/v1/users').get(getAllUsers).post(createUser);
-app.route('/api/v1/users/:id').get(getUser).patch(updateUser).delete(deleteUser);
+app.use('/api/v1/tours', tourRouter); // defining a middleware route or mounting the tour router
+app.use('/api/v1/users', userRouter); // mounting a user router
+
+tourRouter.route('/').get(getAllTours).post(createTour);
+tourRouter.route('/:id').get(getTour).patch(updateTour).delete(delteTour);
+
+userRouter.route('/').get(getAllUsers).post(createUser);
+userRouter.route('/:id').get(getUser).patch(updateUser).delete(deleteUser);
 
 
 // START THE SERVER & listening at 3000
